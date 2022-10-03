@@ -3,81 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hwichoi <hwichoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hwichoi <hwichoi@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/26 14:21:52 by hwichoi           #+#    #+#             */
-/*   Updated: 2022/09/26 22:19:34 by hwichoi          ###   ########.fr       */
+/*   Created: 2022/09/29 01:44:53 by hwichoi           #+#    #+#             */
+/*   Updated: 2022/09/29 03:40:36 by hwichoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <stdio.h>
 
-char	*c_to_bin(int c)
+void	send_bin(int pid, char c)
 {
-	char	*ret;
-	int		i;
+	int	i;
+	int	cnt;
 
-	ret = (char *)malloc(sizeof(char) * 9);
-	if (ret == 0)
-		return (0);
-	ret[8] = '\0';
-	i = 7;
-	while (i >= 0)
+	i = (int)c;
+	cnt = 128;
+	while (cnt > 0)
 	{
-		ret[i] = (c % 2) + '0';
-		c = c / 2;
-		i--;
+		if (i / cnt == 0)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		i = i % cnt;
+		cnt >>= 1;
+		usleep(100);
 	}
-	return (ret);
 }
 
-void	send_bin(pid_t pid, char c)
-{
-	if (c == 0)
-		kill(pid, SIGUSR1);
-	if (c == 1)
-		kill(pid, SIGUSR2);
-	return ;
-}
-
-void	send_end(pid_t pid)
+void	send_end(int pid)
 {
 	int	i;
 
 	i = 0;
-	while (i >= 0)
+	while (i < 8)
 	{
 		kill(pid, SIGUSR1);
 		i++;
-		usleep(500);
+		usleep(100);
 	}
-	return ;
 }
 
 int	main(int ac, char **av)
 {
-	char	*bit;
-	int		i;
-	int		len;
+	int	i;
 
+	i = 0;
 	if (ac != 3)
 		return (0);
-	len = ft_strlen(av[2]);
-	while (*av[2] && len-- > 0)
+	while (av[2][i])
 	{
-		i = 0;
-		bit = c_to_bin((int)(*av[2]));
-		if (bit == 0)
-			return (0);
-		while (bit[i] && i < 8)
-		{
-			send_bin(ft_atoi(av[1]), bit[i++]);
-			usleep(500);
-		}
-		usleep(500);
-		(av[2])++;
-		free(bit);
+		send_bin(ft_atoi(av[1]), av[2][i]);
+		usleep(100);
+		i++;
 	}
 	send_end(ft_atoi(av[1]));
 	exit(0);

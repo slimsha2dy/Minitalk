@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hwichoi <hwichoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hwichoi <hwichoi@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/24 17:27:19 by hwichoi           #+#    #+#             */
-/*   Updated: 2022/09/26 16:04:48 by hwichoi          ###   ########.fr       */
+/*   Created: 2022/09/29 02:32:05 by hwichoi           #+#    #+#             */
+/*   Updated: 2022/09/29 03:01:43 by hwichoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@
 
 typedef struct s_data
 {
-	char	*bit;
-	int		cnt;
-	pid_t	pid;
-	int		dec;
+	int		i;
+	char	chr;
 }	t_data;
 
 #endif

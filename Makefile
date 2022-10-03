@@ -3,22 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hwichoi <hwichoi@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: hwichoi <hwichoi@student.42seoul.k>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/26 15:26:21 by hwichoi           #+#    #+#              #
-#    Updated: 2022/09/26 16:03:28 by hwichoi          ###   ########.fr        #
+#    Created: 2022/09/29 03:44:48 by hwichoi           #+#    #+#              #
+#    Updated: 2022/09/29 04:46:31 by hwichoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME =
 SERVER = server
 CLIENT = client
 
-LIBFT = libft
-LIBFT_LIB = libft.a
+LIBFT = libft/libft.a
+LIBFT_DIR = libft
 
-SRC_C = client.c
-SRC_S = server.c
+SRCS_S = server.c
+SRCS_C = client.c
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
@@ -26,25 +25,21 @@ RM = rm -f
 
 all: $(SERVER) $(CLIENT)
 
-$(NAME): all
-
-$(SERVER):  $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS_S) $(LIBFT_LIB) -o $(SERVER)
-
-$(CLIENT):  $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT_LIB) -o $(CLIENT)
-
 $(LIBFT):
-	make all -C $(LIBFT)/
-	cp $(LIBFT)/$(LIBFT_LIB)
+	make -C $(LIBFT_DIR)
 
-%.o:%.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+$(SERVER): $(LIBFT)
+	$(CC) $(CFLAGS) $(SRCS_S) $(LIBFT) -o $(SERVER)
+
+$(CLIENT): $(LIBFT)
+	$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) -o $(CLIENT)
 
 clean:
-	$(RM) $(SERVER) $(CLIENT)
+	$(RM) *.o
+	make clean -C $(LIBFT_DIR)
 
 fclean: clean
+	$(RM) $(SERVER) $(CLIENT)
 	make fclean -C $(LIBFT_DIR)
 
 re: fclean all
